@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartGameMenu : MonoBehaviour
+public class GameOverMenu : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
 
-    public void StartGame()
+    }
+    public void RestartGame()
     {
         SceneManager.LoadScene("Level1");
     }
 
-    // 退出游戏方法
+    // 退出游戏
     public void QuitGame()
     {
-        //Application.Quit();
         Application.Quit();
 
         // 在编辑器模式下，退出 Play 模式
