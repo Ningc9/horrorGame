@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    [Header("拾取设置")]
+    [Header("pick up setting")]
     public KeyCode pickupKey = KeyCode.E;  // 拾取物品的按键
     public float pickupRange = 2.0f;       // 拾取距离
     public Transform handPosition;         // 手的位置，物品将被放置在这里
     public LayerMask pickupLayer;          // 可拾取物品的层
 
-    [Header("当前状态")]
+    [Header("current situation")]
     public GameObject currentItem;         // 当前手中的物品
     public bool isHoldingItem = false;     // 是否正在持有物品
 
     private Camera playerCamera;
+
+    [Header("current item name")]
+    public string currentItemName = "";  // 当前拿着的物品名字
 
     void Start()
     {
@@ -57,7 +60,14 @@ public class ItemPickup : MonoBehaviour
         if (Physics.Raycast(ray, out hit, pickupRange, pickupLayer))
         {
             // 找到了可拾取的物品
-            PickupItem(hit.collider.gameObject);
+            if (hit.collider.CompareTag("Pickup"))
+            {
+                PickupItem(hit.collider.gameObject);
+            }
+            else
+            {
+                Debug.Log("这个物体不能被捡起：" + hit.collider.name);
+            }
         }
     }
 
@@ -66,6 +76,7 @@ public class ItemPickup : MonoBehaviour
         // 保存对物品的引用
         currentItem = item;
         isHoldingItem = true;
+        currentItemName = item.name; // 保存当前物品的名字
 
         // 获取物品的Rigidbody（如果有）
         Rigidbody itemRigidbody = item.GetComponent<Rigidbody>();
@@ -120,6 +131,7 @@ public class ItemPickup : MonoBehaviour
 
             // 清除引用
             currentItem = null;
+            currentItemName = "";
             isHoldingItem = false;
         }
     }
