@@ -19,6 +19,13 @@ public class ItemPickup : MonoBehaviour
     [Header("current item name")]
     public string currentItemName = "";  // 当前拿着的物品名字
 
+    public static ItemPickup instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         // 获取玩家摄像机
