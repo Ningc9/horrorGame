@@ -32,7 +32,7 @@ public class ChairRotator : MonoBehaviour
 
         if (distance <= interactDistance && Physics.Raycast(ray, out hit, interactDistance))
         {
-            if (hit.collider.gameObject == gameObject && Input.GetKeyDown(KeyCode.E))
+            if (hit.collider.gameObject == gameObject && Input.GetMouseButtonDown(1))
             {
                 RotateChair();
             }

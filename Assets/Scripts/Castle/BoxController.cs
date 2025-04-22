@@ -11,6 +11,8 @@ public class BoxController : MonoBehaviour
     private Quaternion closedRotation;  // 盖子关闭时的角度
     private Quaternion openRotation;    // 盖子打开时的角度
 
+    private Camera cam;
+
     void Start()
     {
         // 记录初始角度为“关闭”
@@ -18,13 +20,24 @@ public class BoxController : MonoBehaviour
 
         // 计算打开角度（绕 X 轴旋转）
         openRotation = closedRotation * Quaternion.Euler(openAngle, 0, 0);
+
+        cam = Camera.main;
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isOpen = !isOpen; // 切换开关状态
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 5f))
+            {
+                if (hit.collider.gameObject == this.gameObject)
+                {
+                    isOpen = !isOpen; // 切换开关状态
+                }
+            }
         }
 
         // 平滑旋转到目标角度

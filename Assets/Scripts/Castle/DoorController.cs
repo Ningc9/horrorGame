@@ -6,12 +6,14 @@ using UnityEngine;
 public class DoorController : MonoBehaviour
 {
     public ItemPickup playerPickup; // 拖拽玩家的 ItemPickup 脚本
-
+    public float interactionRange = 3f;
     private bool isOpen = false;
+    private Camera playerCamera;
+
 
     void Start()
     {
-        
+        playerCamera = Camera.main;
     }
 
     void Update()
@@ -25,22 +27,29 @@ public class DoorController : MonoBehaviour
 
     void TryOpenDoor()
     {
-        if (playerPickup.isHoldingItem && playerPickup.currentItem != null)
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, interactionRange))
         {
-            string itemName = playerPickup.currentItem.name;
+            if (hit.collider.gameObject == this.gameObject) // 是这扇门
+            {
+                if (playerPickup.isHoldingItem && playerPickup.currentItem != null)
+                {
+                    string itemName = playerPickup.currentItem.name;
 
-            if (itemName.Contains("CrowBar")) // 如果是撬棍
-            {
-                OpenDoor();
+                    if (itemName.Contains("CrowBar")) // 如果是撬棍
+                    {
+                        OpenDoor();
+                    }
+                    else
+                    {
+                        Debug.Log("需要撬棍才能打开这扇门！");
+                    }
+                }
+                else
+                {
+                    Debug.Log("你手上什么都没有！");
+                }
             }
-            else
-            {
-                Debug.Log("需要撬棍才能打开这扇门！");
-            }
-        }
-        else
-        {
-            Debug.Log("你手上什么都没有！");
         }
     }
 
