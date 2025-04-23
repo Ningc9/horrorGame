@@ -8,6 +8,10 @@ public class ChairRotator : MonoBehaviour
     private Transform player;
     public float rotationAngle = 90f;
 
+    public GameObject fenceToHide;
+    private float totalRotation = 0f;
+    private bool fenceHidden = false; 
+
     void Start()
     {
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -42,6 +46,15 @@ public class ChairRotator : MonoBehaviour
     void RotateChair()
     {
         transform.Rotate(0f, rotationAngle, 0f);
-        Debug.Log("椅子旋转了！");
+        totalRotation += Mathf.Abs(rotationAngle); // 累加旋转角度
+
+        Debug.Log("椅子旋转了，总角度：" + totalRotation);
+
+        if (!fenceHidden && totalRotation >= 180f && fenceToHide != null)
+        {
+            fenceToHide.SetActive(false);
+            fenceHidden = true;
+            Debug.Log("栅栏消失了！");
+        }
     }
 }
