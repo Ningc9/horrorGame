@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class ScrollOpener : MonoBehaviour
 {
@@ -10,14 +11,15 @@ public class ScrollOpener : MonoBehaviour
     void Start()
     {
         letterCanvas.SetActive(false);
-
         camera = Camera.main;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        // 右键点卷轴时触发
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !isInspecting)
         {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -29,10 +31,8 @@ public class ScrollOpener : MonoBehaviour
                     EnterInspectMode();
                 }
             }
-
         }
 
-        // ESC退出查看
         if (isInspecting && Input.GetKeyDown(KeyCode.Escape))
         {
             ExitInspectMode();
@@ -41,20 +41,26 @@ public class ScrollOpener : MonoBehaviour
 
     void EnterInspectMode()
     {
-        Debug.Log("//////////////////////");
         isInspecting = true;
         letterCanvas.SetActive(true);
-        Cursor.lockState = CursorLockMode.None; // 解锁鼠标（可选）
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Time.timeScale = 0f; // 暂停游戏（可选）
+        Time.timeScale = 0f;
     }
 
     void ExitInspectMode()
     {
         isInspecting = false;
         letterCanvas.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked; // 重新锁定鼠标（可选）
+        Time.timeScale = 1f;
+
+        StartCoroutine(ForceHideCursor());
+    }
+
+    IEnumerator ForceHideCursor()
+    {
+        yield return null; // 等一帧
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Time.timeScale = 1f; // 恢复游戏（可选）
     }
 }
