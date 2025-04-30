@@ -19,7 +19,7 @@ public class StartGameMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("SampleScene");
     }
 
     // 退出游戏方法
