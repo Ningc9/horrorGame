@@ -57,7 +57,7 @@ public class StoveFirewoodHandler : MonoBehaviour
         }
     }
 
-    void TryAddFirewood(ItemPickup pickup)
+    /*void TryAddFirewood(ItemPickup pickup)
     {
         foreach (GameObject slot in firewoodSlots)
         {
@@ -73,7 +73,40 @@ public class StoveFirewoodHandler : MonoBehaviour
         }
 
         Debug.Log("炉子已经满了！");
+    }*/
+
+    void TryAddFirewood(ItemPickup pickup)
+    {
+        bool hasAnyInactive = false;
+
+        foreach (GameObject slot in firewoodSlots)
+        {
+            if (!slot.activeSelf)
+            {
+                hasAnyInactive = true;
+                break;
+            }
+        }
+
+        if (!hasAnyInactive)
+        {
+            Debug.Log("炉子已经满了！");
+            return;
+        }
+
+        // 一次性点亮全部柴火
+        foreach (GameObject slot in firewoodSlots)
+        {
+            slot.SetActive(true);
+        }
+
+        Destroy(pickup.currentItem);
+        pickup.currentItem = null;
+        pickup.isHoldingItem = false;
+
+        Debug.Log("添加了一块柴火，全部点亮！");
     }
+
 
     void TryIgnite()
     {
