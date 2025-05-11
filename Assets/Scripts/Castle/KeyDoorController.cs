@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class KeyDoorController : MonoBehaviour
 {
-    public ItemPickup playerPickup;           // ÍÏ×§Íæ¼ÒµÄ ItemPickup ½Å±¾
-    public float interactionRange = 3f;       // ½»»¥¾àÀë
+    public ItemPickup playerPickup;           // æ‹–æ‹½ç©å®¶çš„ ItemPickup è„šæœ¬
+    public float interactionRange = 3f;       // äº¤äº’è·ç¦»
     private Camera playerCamera;
     private bool isOpen = false;
 
@@ -24,11 +24,11 @@ public class KeyDoorController : MonoBehaviour
 
     void TryOpenDoor()
     {
-        // ·¢ÉäÉäÏß£¬ÅĞ¶ÏÍæ¼ÒÊÇ·ñ¶Ô×Åµ±Ç°ÕâÉÈÃÅ
+        // å‘å°„å°„çº¿ï¼Œåˆ¤æ–­ç©å®¶æ˜¯å¦å¯¹ç€å½“å‰è¿™æ‰‡é—¨
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange))
         {
-            if (hit.collider.gameObject == this.gameObject) // ÊÇÕâÉÈÃÅ
+            if (hit.collider.gameObject == this.gameObject) // æ˜¯è¿™æ‰‡é—¨
             {
                 if (playerPickup.isHoldingItem && playerPickup.currentItem != null)
                 {
@@ -40,12 +40,12 @@ public class KeyDoorController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("ĞèÒªÂÌÉ«Ô¿³×²ÅÄÜ´ò¿ªÕâÉÈÃÅ£¡");
+                        Debug.Log("éœ€è¦ç»¿è‰²é’¥åŒ™æ‰èƒ½æ‰“å¼€è¿™æ‰‡é—¨ï¼");
                     }
                 }
                 else
                 {
-                    Debug.Log("ÄãÊÖÉÏÊ²Ã´¶¼Ã»ÓĞ£¡");
+                    Debug.Log("ä½ æ‰‹ä¸Šä»€ä¹ˆéƒ½æ²¡æœ‰ï¼");
                 }
             }
         }
@@ -54,7 +54,7 @@ public class KeyDoorController : MonoBehaviour
     void OpenDoor()
     {
         isOpen = true;
-        transform.Rotate(Vector3.up, 90f);  // ¼òµ¥Ğı×ª90¶È
-        Debug.Log("ÃÅÒÑ´ò¿ª£¡");
+        transform.Rotate(Vector3.up, 90f);  // ç®€å•æ—‹è½¬90åº¦
+        Debug.Log("é—¨å·²æ‰“å¼€ï¼");
     }
 }
