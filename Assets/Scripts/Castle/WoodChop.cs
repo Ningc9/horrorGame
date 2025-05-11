@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class WoodChop : MonoBehaviour
 {
-    public int maxHits = 4;
-    public GameObject firewoodPrefab;      // 柴火预制体
-    public Transform[] dropPositions;      // 掉落位置（最多 4 个）
+    public int maxHits = 4;                     // 可砍次数
+    public GameObject firewoodPrefab;          // 柴火预制体
+    public Transform dropPosition;             // 柴火掉落位置
 
     private int currentHits = 0;
     private bool isDestroyed = false;
+    private bool hasDroppedWood = false;       // 是否已掉落过柴火
 
     private Camera mainCamera;
 
@@ -35,7 +36,7 @@ public class WoodChop : MonoBehaviour
     {
         if (isDestroyed) return;
 
-        // 检查是否拿着斧头（通过名字判断）
+        // 检查是否拿着斧头
         GameObject currentItem = FindObjectOfType<ItemPickup>().currentItem;
         if (currentItem == null || !currentItem.name.Contains("Axe"))
         {
@@ -43,16 +44,17 @@ public class WoodChop : MonoBehaviour
             return;
         }
 
-        // 掉落柴火
-        if (currentHits < dropPositions.Length && firewoodPrefab != null)
-        {
-            Instantiate(firewoodPrefab, dropPositions[currentHits].position, Quaternion.identity);
-        }
-
         currentHits++;
         Debug.Log("你砍了木头！当前砍了：" + currentHits + " 次");
 
-        if (currentHits >= maxHits)
+        // 第一次砍时掉落一块木头
+        if (!hasDroppedWood && firewoodPrefab != null && dropPosition != null)
+        {
+            Instantiate(firewoodPrefab, dropPosition.position, Quaternion.identity);
+            hasDroppedWood = true;
+        }
+
+        if (currentHits >= 1)
         {
             DestroyWood();
         }

@@ -4,43 +4,32 @@ using UnityEngine;
 
 public class BoxController : MonoBehaviour
 {
-    public Transform lid;               // ¸Ç×ÓÎïÌå
-    public float openAngle = -90f;      // ´ò¿ª½Ç¶È
-    public float openSpeed = 2f;        // ´ò¿ª/¹Ø±ÕËÙ¶È
-    private bool isOpen = false;        // ÊÇ·ñÒÑ¾­´ò¿ª
-    private Quaternion closedRotation;  // ¸Ç×Ó¹Ø±ÕÊ±µÄ½Ç¶È
-    private Quaternion openRotation;    // ¸Ç×Ó´ò¿ªÊ±µÄ½Ç¶È
+    public Transform lid;               // ç®±å­ç›–å­
+    public float openAngle = -90f;      // æ‰“å¼€è§’åº¦
+    public float openSpeed = 2f;        // å¼€/å…³é€Ÿåº¦
+    private bool isOpen = false;        // æ˜¯å¦å·²ç»å¼€å¯
+    private Quaternion closedRotation;  // ç®±å­å…³é—­æ—¶çš„è§’åº¦
+    private Quaternion openRotation;    // ç®±å­æ‰“å¼€æ—¶çš„è§’åº¦
 
-    private Camera cam;
+    // æ·»åŠ å…¬å…±å±æ€§æ¥è®¿é—® isOpen
+    public bool IsOpen
+    {
+        get { return isOpen; }
+        set { isOpen = value; }
+    }
 
     void Start()
     {
-        // ¼ÇÂ¼³õÊ¼½Ç¶ÈÎª¡°¹Ø±Õ¡±
+        // è®°å½•åˆå§‹è§’åº¦ä¸º"å…³é—­"
         closedRotation = lid.localRotation;
 
-        // ¼ÆËã´ò¿ª½Ç¶È£¨ÈÆ X ÖáĞı×ª£©
+        // è®¡ç®—æ‰“å¼€è§’åº¦ï¼Œåœ¨ X è½´ä¸Šæ—‹è½¬
         openRotation = closedRotation * Quaternion.Euler(openAngle, 0, 0);
-
-        cam = Camera.main;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 5f))
-            {
-                if (hit.collider.gameObject == this.gameObject)
-                {
-                    isOpen = !isOpen; // ÇĞ»»¿ª¹Ø×´Ì¬
-                }
-            }
-        }
-
-        // Æ½»¬Ğı×ªµ½Ä¿±ê½Ç¶È
+        // å¹³æ»‘æ—‹è½¬åˆ°ç›®æ ‡è§’åº¦
         if (isOpen)
         {
             lid.localRotation = Quaternion.Slerp(lid.localRotation, openRotation, Time.deltaTime * openSpeed);
