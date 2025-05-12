@@ -1,26 +1,50 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
+using TMPro;
 
 public class ScrollOpener : MonoBehaviour
 {
-    public GameObject letterCanvas; // 拖进信件Canvas
+    [Header("UI References")]
+    [SerializeField] private Canvas scrollCanvas;
+    [SerializeField] private TextMeshProUGUI scrollText;
+    
+    [Header("Settings")]
+    [SerializeField] private float interactionRange = 5f;
+    
     private bool isInspecting = false;
+    private Camera mainCamera;
+    private ItemPickup itemPickup;
 
+<<<<<<< HEAD
     private Camera myCamera; // 改名
 
     void Start()
     {
         letterCanvas.SetActive(false);
         myCamera = Camera.main; // 改名
+=======
+    private void Start()
+    {
+        // Hide UI at start
+        if (scrollCanvas != null)
+        {
+            scrollCanvas.gameObject.SetActive(false);
+        }
+        
+        mainCamera = Camera.main;
+        itemPickup = FindObjectOfType<ItemPickup>();
+>>>>>>> 426642d5cd8cf6ba8ebe6945160da9bb82f25bb0
 
+        // Lock cursor at start
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isInspecting)
+        if (Input.GetMouseButtonDown(1) && !isInspecting) // Right click
         {
+<<<<<<< HEAD
             Ray ray = myCamera.ScreenPointToRay(Input.mousePosition); // 改名
             RaycastHit hit;
 
@@ -31,35 +55,56 @@ public class ScrollOpener : MonoBehaviour
                     EnterInspectMode();
                 }
             }
+=======
+            TryReadScroll();
+>>>>>>> 426642d5cd8cf6ba8ebe6945160da9bb82f25bb0
         }
-
-        if (isInspecting && Input.GetKeyDown(KeyCode.Escape))
+        else if (isInspecting && Input.GetKeyDown(KeyCode.Escape))
         {
-            ExitInspectMode();
+            CloseScroll();
         }
     }
 
-    void EnterInspectMode()
+    private void TryReadScroll()
+    {
+        if (mainCamera == null || scrollCanvas == null || itemPickup == null) return;
+
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionRange))
+        {
+            if (hit.collider.gameObject == gameObject)
+            {
+                // Check if player is holding the vase
+                if (itemPickup.isHoldingItem && 
+                    itemPickup.currentItem != null && 
+                    itemPickup.currentItem.name.Contains("vase.002"))
+                {
+                    OpenScroll();
+                }
+                else
+                {
+                    Debug.Log("You need to hold the special vase to read this scroll.");
+                }
+            }
+        }
+    }
+
+    private void OpenScroll()
     {
         isInspecting = true;
-        letterCanvas.SetActive(true);
+        scrollCanvas.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Time.timeScale = 0f;
     }
 
-    void ExitInspectMode()
+    private void CloseScroll()
     {
         isInspecting = false;
-        letterCanvas.SetActive(false);
+        scrollCanvas.gameObject.SetActive(false);
         Time.timeScale = 1f;
-
-        StartCoroutine(ForceHideCursor());
-    }
-
-    IEnumerator ForceHideCursor()
-    {
-        yield return null; // 等一帧
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

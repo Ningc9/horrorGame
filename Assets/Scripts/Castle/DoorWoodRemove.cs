@@ -6,44 +6,43 @@ public class DoorWoodRemove : MonoBehaviour
 {
     public GameObject wood;
     private bool isHiden = true;
-
-    private Camera camera;
+    private Camera mainCamera;
 
     void Start()
     {
-        camera = Camera.main;
+        mainCamera = Camera.main;
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, 5f))
             {
                 if (hit.collider.gameObject == this.gameObject)
                 {
-                    // 获取玩家当前拿的物品
+                    // Check player's current item
                     ItemPickup pickup = FindObjectOfType<ItemPickup>();
                     if (pickup != null && pickup.isHoldingItem && pickup.currentItem != null)
                     {
-                        // 判断是否是撬棍（名字里包含Crowbar）
+                        // Check if holding crowbar
                         if (pickup.currentItem.name.Contains("CrowBar"))
                         {
                             isHiden = false;
                             wood.SetActive(isHiden);
-                            Debug.Log("木板已被撬开！");
+                            Debug.Log("Wood has been removed!");
                         }
                         else
                         {
-                            Debug.Log("你需要撬棍才能撬开木板！");
+                            Debug.Log("You need a crowbar to remove the wood!");
                         }
                     }
                     else
                     {
-                        Debug.Log("你没有拿着任何工具！");
+                        Debug.Log("You are not holding any tools!");
                     }
                 }
             }

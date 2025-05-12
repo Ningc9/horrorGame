@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI; // 引入 UI 库
 using System.Collections;
-
+using TMPro;
 
 public class BoxPrompt : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class BoxPrompt : MonoBehaviour
     public Text completeText; 
     public string nextSceneName = "Level1"; 
 
+    public TextMeshProUGUI promptText;
 
     void Start()
     {
@@ -94,4 +95,17 @@ public class BoxPrompt : MonoBehaviour
         SceneManager.LoadScene(nextSceneName);
     }
 
+    public void ShowPrompt(string text)
+    {
+        if (promptText != null)
+        {
+            promptText.text = text;
+            gameObject.SetActive(true);
+        }
+    }
+    
+    public void HidePrompt()
+    {
+        gameObject.SetActive(false);
+    }
 }
