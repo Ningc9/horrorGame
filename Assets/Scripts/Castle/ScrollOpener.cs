@@ -6,12 +6,12 @@ public class ScrollOpener : MonoBehaviour
     public GameObject letterCanvas; // 拖进信件Canvas
     private bool isInspecting = false;
 
-    private Camera camera;
+    private Camera myCamera; // 改名
 
     void Start()
     {
         letterCanvas.SetActive(false);
-        camera = Camera.main;
+        myCamera = Camera.main; // 改名
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -21,7 +21,7 @@ public class ScrollOpener : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && !isInspecting)
         {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = myCamera.ScreenPointToRay(Input.mousePosition); // 改名
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, 5f))

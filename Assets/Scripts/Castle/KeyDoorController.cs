@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyDoorController : MonoBehaviour
+public class DoorController : MonoBehaviour
 {
-    public ItemPickup playerPickup;           // 拖拽玩家的 ItemPickup 脚本
-    public float interactionRange = 3f;       // 交互距离
-    private Camera playerCamera;
+    public float interactionRange = 3f;
     private bool isOpen = false;
+    private Camera playerCamera;
 
     void Start()
     {
@@ -16,7 +13,8 @@ public class KeyDoorController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !isOpen)
+        // 按下E键时尝试开门
+        if (Input.GetKeyDown(KeyCode.E) && !isOpen)
         {
             TryOpenDoor();
         }
@@ -24,28 +22,19 @@ public class KeyDoorController : MonoBehaviour
 
     void TryOpenDoor()
     {
-        // 发射射线，判断玩家是否对着当前这扇门
+        // 从屏幕中心发射一条射线
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange))
         {
             if (hit.collider.gameObject == this.gameObject) // 是这扇门
             {
-                if (playerPickup.isHoldingItem && playerPickup.currentItem != null)
+                if (PlayerInventory.hasKey)
                 {
-                    string itemName = playerPickup.currentItem.name;
-
-                    if (itemName.Contains("GreenKey"))
-                    {
-                        OpenDoor();
-                    }
-                    else
-                    {
-                        Debug.Log("需要绿色钥匙才能打开这扇门！");
-                    }
+                    OpenDoor();
                 }
                 else
                 {
-                    Debug.Log("你手上什么都没有！");
+                    Debug.Log("你没有钥匙，无法开门！");
                 }
             }
         }
@@ -54,7 +43,18 @@ public class KeyDoorController : MonoBehaviour
     void OpenDoor()
     {
         isOpen = true;
-        transform.Rotate(Vector3.up, 90f);  // 简单旋转90度
+        // 旋转门90度（你也可以用动画）
+        transform.Rotate(Vector3.up, 90f);
         Debug.Log("门已打开！");
+        // 可选：开门后让钥匙消失
+        Camera cam = Camera.main;
+        if (cam != null)
+        {
+            Transform holdPoint = cam.transform.Find("KeyHoldPoint");
+            if (holdPoint != null && holdPoint.childCount > 0)
+            {
+                holdPoint.GetChild(0).gameObject.SetActive(false);
+            }
+        }
     }
 }
