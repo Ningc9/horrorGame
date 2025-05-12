@@ -5,16 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Level9Trans : MonoBehaviour
 {
-    //public string nextSceneName; // ÏÂÒ»¸ö³¡¾°µÄÃû³Æ
-    public string playerTag = "Player"; // Íæ¼Ò±êÇ©
+    //public string nextSceneName; // ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public string playerTag = "Player"; // ï¿½ï¿½Ò±ï¿½Ç©
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
         {
-            Debug.Log("Íæ¼ÒÀë¿ª³Ç±¤£¬¼ÓÔØÏÂÒ»¸ö³¡¾°£º");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ë¿ªï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             //SceneManager.LoadScene(nextSceneName);
-            SceneManager.LoadScene("Level2");
+            SceneManager.LoadScene("Level1");
         }
     }
 }
